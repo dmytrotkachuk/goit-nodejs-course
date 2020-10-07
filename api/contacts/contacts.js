@@ -20,11 +20,12 @@ async function getContactById(contactId) {
 async function removeContact(contactId) {
     const idxOfContact = await getContactById(contactId)
     if (!idxOfContact) {
-        return "not found"
+        return false
     }
     const data = await listContacts()
     const filteredContacts = data.filter((contact) => contact.id !== contactId)
     fsPromises.writeFile(contactsPath, JSON.stringify(filteredContacts))
+    return filteredContacts
 }
 
 async function addContact(name, email, phone) {
@@ -45,9 +46,7 @@ async function addContact(name, email, phone) {
 async function updateContact(contactId, dataUpdate) {
     const contactInContacts = await getContactById(contactId)
     if (!contactInContacts) {
-        //Doesn't work=>
-        // return false
-        return "not found"
+        return false
     }
     const data = await listContacts()
     let updated

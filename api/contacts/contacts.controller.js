@@ -36,13 +36,9 @@ class ContactsController {
         try {
             const id = Number.parseInt(req.params.contactId)
             const contactToUpdate = await contacts.updateContact(id, req.body)
-            // Doesn't work =>
-            // const updateSuccess = res.status(200).send({ "message": "contact updated" })
-            // const updateFailure = res.status(404).send({ "message": "Not found" })
-            // return !contactToUpdate ? updateFailure : updateSuccess
-            return contactToUpdate !== "not found" ?
-                res.status(200).send({ "message": "contact updated" }).end() :
-                res.status(404).send({ "message": "Not found" }).end()
+            return contactToUpdate ?
+                res.status(200).send({ "message": "contact updated" }) :
+                res.status(404).send({ "message": "Not found" })
 
         } catch (err) {
             next(err)
@@ -54,11 +50,9 @@ class ContactsController {
             const contactId = Number.parseInt(req.params.contactId)
             const contactsList = await contacts.removeContact(contactId)
 
-            return contactsList !== "not found" ?
+            return contactsList ?
                 res.status(200).send({ "message": "contact deleted" }) :
                 res.status(404).send({ "message": 'Not found' })
-
-
 
         } catch (err) {
             next(err)
