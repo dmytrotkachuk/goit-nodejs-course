@@ -1,11 +1,12 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const cors = require('cors')
 const logger = require('morgan')
 const contactsRouter = require('./contacts/contacts.routes')
 require('dotenv').config()
 
 
-
+const URI = process.env.MONGO_URI || ''
 const PORT = process.env.PORT || 3000
 
 class UserService {
@@ -14,10 +15,11 @@ class UserService {
         this.server = null
     }
 
-    start() {
+    async start() {
         this.initServer()
         this.initMiddleware()
         this.initRoutes()
+        await this.initDb()
         this.errorHandler()
         this.startListening()
     }
@@ -37,6 +39,23 @@ class UserService {
 
     initRoutes() {
         this.server.use('/api', contactsRouter)
+    }
+
+    async initDb() {
+        const opts = {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }
+
+        try {
+            await mongoose.connect(URI, opts)
+        } catch (err) {
+            console.log("Server was closed with connect to db")
+            process.exit(1)
+        }
+        console.log("Database connection successful")
     }
 
     errorHandler() {
