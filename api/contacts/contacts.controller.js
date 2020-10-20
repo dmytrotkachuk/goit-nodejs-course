@@ -7,8 +7,14 @@ class ContactsController {
 
     async getContacts(req, res, next) {
         try {
-            const contactsList = await ContactModel.find()
-            return res.send(contactsList)
+            const { sub, page, limit } = req.query
+            const options = {
+                page: page || 1,
+                limit: limit || 20
+            }
+            const contactsList = await ContactModel.paginate(sub && { subscription: sub }, options)
+
+            return res.send(contactsList.docs)
         } catch (err) {
             next(err)
         }
