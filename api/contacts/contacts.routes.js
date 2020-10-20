@@ -4,11 +4,11 @@ const ContactsController = require('./contacts.controller')
 
 const contactsRouter = Router()
 
-contactsRouter.get("/contacts", ContactsController.getContacts)
-contactsRouter.get("/contacts/:contactId", ContactsController.getContactById)
-contactsRouter.post("/contacts", ContactsController.validateCreateContact, ContactsController.createContact)
-contactsRouter.patch("/contacts/:contactId", ContactsController.validateUpdateContact, ContactsController.updateContact)
-contactsRouter.delete("/contacts/:contactId", ContactsController.deleteContact)
+contactsRouter.get("/", ContactsController.getContacts)
+contactsRouter.get("/:contactId", ContactsController.getContactById)
+contactsRouter.post("/", ContactsController.validateCreateContact, ContactsController.createContact)
+contactsRouter.patch("/:contactId", ContactsController.validateUpdateContact, ContactsController.updateContact)
+contactsRouter.delete("/:contactId", ContactsController.deleteContact)
 
 
 

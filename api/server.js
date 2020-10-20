@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const logger = require('morgan')
 const contactsRouter = require('./contacts/contacts.routes')
+const userRouter = require('./users/user.routes')
 require('dotenv').config()
 
 
@@ -38,18 +39,19 @@ class UserService {
     }
 
     initRoutes() {
-        this.server.use('/api', contactsRouter)
+        this.server.use('/api/contacts', contactsRouter)
+        this.server.use('/', userRouter)
     }
 
     async initDb() {
-        const opts = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        }
-
         try {
+            // mongoose.set('debug', true)
+            const opts = {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            }
             await mongoose.connect(URI, opts)
         } catch (err) {
             console.log("Server was closed with connect to db")
